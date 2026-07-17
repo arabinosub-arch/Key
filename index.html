@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copy</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#6a11cb,#2575fc,#00d4ff);
+}
+
+.card{
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(12px);
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+button{
+    padding:16px 40px;
+    font-size:22px;
+    font-weight:bold;
+    border:none;
+    border-radius:12px;
+    color:#fff;
+    cursor:pointer;
+    background:linear-gradient(45deg,#ff416c,#ff4b2b);
+}
+
+button:active{
+    transform:scale(.96);
+}
+
+#status{
+    margin-top:20px;
+    color:#fff;
+    font-size:18px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <button onclick="copyText()">📋 Copy</button>
+    <div id="status"></div>
+</div>
+
+<script>
+function copyText() {
+    const text = "Hato";
+    const status = document.getElementById("status");
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+        .then(() => {
+            status.textContent = "✅ Copied!";
+        })
+        .catch(() => {
+            fallbackCopy();
+        });
+    } else {
+        fallbackCopy();
+    }
+
+    function fallbackCopy() {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        try {
+            document.execCommand("copy");
+            status.textContent = "✅ Copied!";
+        } catch (e) {
+            status.textContent = "❌ Copy failed";
+        }
+
+        document.body.removeChild(textarea);
+    }
+}
+</script>
+
+</body>
+</html>
